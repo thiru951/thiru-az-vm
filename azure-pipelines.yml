@@ -11,7 +11,7 @@ steps:
 
 - task: TerraformToolInstaller@0
   inputs:
-    terraformVersion: 'latest'
+    terraformVersion: '1.6.6'
 
 - script: |
     terraform init
