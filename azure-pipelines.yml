@@ -9,7 +9,7 @@ variables:
 
 steps:
 
-- task: TerraformInstaller@1
+- task: TerraformToolInstaller@0
   inputs:
     terraformVersion: 'latest'
 
