@@ -18,9 +18,9 @@ steps:
   displayName: Terraform Init
 
 - script: |
-    terraform plan -var="vm_password=$(vm-password)"
+    terraform plan -var="vm_password=$(vm_password)"
   displayName: Terraform Plan
 
 - script: |
-    terraform apply -auto-approve -var="vm_password=$(vm-password)"
+    terraform apply -auto-approve -var="vm_password=$(vm_password)"
   displayName: Terraform Apply
