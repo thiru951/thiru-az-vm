@@ -9,14 +9,19 @@ variables:
 
 steps:
 
-- script: |
-    sudo apt-get update
-    sudo apt-get install -y unzip wget
-    wget https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
-    unzip terraform_1.6.6_linux_amd64.zip
-    sudo mv terraform /usr/local/bin/
-    terraform version
-  displayName: Install Terraform
+- task: TerraformToolInstaller@0
+  inputs:
+    terraformVersion: '1.6.6'
+
+# ✅ Azure login using YOUR service connection
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'thiru-service-connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      echo "Azure login successful"
+      az account show
 
 - script: |
     terraform init
