@@ -9,27 +9,20 @@ variables:
 
 steps:
 
-# Install Terraform
-- script: |
-    sudo apt-get update
-    sudo apt-get install -y unzip wget
-    wget https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
-    unzip terraform_1.6.6_linux_amd64.zip
-    sudo mv terraform /usr/local/bin/
-    terraform version
-  displayName: Install Terraform
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'azure-subscription-conn'
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      sudo apt-get update
+      sudo apt-get install -y unzip wget
 
-# Terraform Init
-- script: |
-    terraform init -reconfigure
-  displayName: Terraform Init
+      wget https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+      unzip terraform_1.6.6_linux_amd64.zip
+      sudo mv terraform /usr/local/bin/
 
-# Terraform Plan
-- script: |
-    terraform plan -var="vm_password=$(vm_password)"
-  displayName: Terraform Plan
-
-# Terraform Apply
-- script: |
-    terraform apply -auto-approve -var="vm_password=$(vm_password)"
-  displayName: Terraform Apply
+      terraform version
+      terraform init -reconfigure
+      terraform plan -var="vm_password=$(vm_password)"
+      terraform apply -auto-approve -var="vm_password=$(vm_password)"
