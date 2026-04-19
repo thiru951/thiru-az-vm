@@ -21,7 +21,6 @@ steps:
 
 # Terraform Init
 - script: |
-    export ARM_SKIP_PROVIDER_REGISTRATION=true
     terraform init -reconfigure
   displayName: Terraform Init
 
