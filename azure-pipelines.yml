@@ -20,24 +20,31 @@ steps:
   displayName: Install Terraform
 
 # Terraform Init
-- script: |
-    terraform init
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'azure-subscription-conn'
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      terraform init
   displayName: Terraform Init
-  env:
-    ARM_USE_CLI: "false"
 
 # Terraform Plan
-- script: |
-    terraform plan -var="vm_password=$VM_PASSWORD"
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'azure-subscription-conn'
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      terraform plan -var="vm_password=$(vm_password)"
   displayName: Terraform Plan
-  env:
-    VM_PASSWORD: $(vm_password)
-    ARM_USE_CLI: "false"
 
 # Terraform Apply
-- script: |
-    terraform apply -auto-approve -var="vm_password=$VM_PASSWORD"
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'azure-subscription-conn'
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      terraform apply -auto-approve -var="vm_password=$(vm_password)"
   displayName: Terraform Apply
-  env:
-    VM_PASSWORD: $(vm_password)
-    ARM_USE_CLI: "false"
