@@ -9,7 +9,7 @@ variables:
 
 steps:
 
-# ---------------- Install Terraform ----------------
+# Install Terraform
 - script: |
     sudo apt-get update
     sudo apt-get install -y unzip wget
@@ -19,17 +19,27 @@ steps:
     terraform version
   displayName: Install Terraform
 
-# ---------------- Terraform Init ----------------
+# Azure Login Context (IMPORTANT FIX)
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'azure-subscription-conn'
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az account show
+  displayName: Azure Login Check
+
+# Terraform Init
 - script: |
     terraform init -reconfigure
   displayName: Terraform Init
 
-# ---------------- Terraform Plan ----------------
+# Terraform Plan
 - script: |
     terraform plan -var="vm_password=$(vm_password)"
   displayName: Terraform Plan
 
-# ---------------- Terraform Apply ----------------
+# Terraform Apply
 - script: |
     terraform apply -auto-approve -var="vm_password=$(vm_password)"
   displayName: Terraform Apply
