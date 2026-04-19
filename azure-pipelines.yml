@@ -19,19 +19,21 @@ steps:
     terraform version
   displayName: Install Terraform
 
-# 🔥 IMPORTANT: USE AZURE LOGIN TASK (NOT SCRIPT)
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'azure-subscription-conn'
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      echo "Logged in via Service Connection"
+# Terraform Init (IMPORTANT FIX)
+- script: |
+    terraform init -reconfigure \
+      -backend-config="resource_group_name=YOUR_STORAGE_RG" \
+      -backend-config="storage_account_name=thiruterraformstate123" \
+      -backend-config="container_name=tfstate" \
+      -backend-config="key=terraform.tfstate"
+  displayName: Terraform Init
 
-      # Terraform MUST inherit this context
-      export ARM_USE_CLI=false
+# Terraform Plan
+- script: |
+    terraform plan -var="vm_password=$(vm_password)"
+  displayName: Terraform Plan
 
-      terraform init -input=false
-      terraform plan -var="vm_password=$(vm_password)"
-      terraform apply -auto-approve -var="vm_password=$(vm_password)"
-  displayName: Terraform Deploy
+# Terraform Apply
+- script: |
+    terraform apply -auto-approve -var="vm_password=$(vm_password)"
+  displayName: Terraform Apply
