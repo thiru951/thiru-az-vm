@@ -9,4 +9,7 @@ terraform {
 
 provider "azurerm" {
   features {}
+
+  # 🔥 THIS IS THE KEY FIX
+  use_oidc = true
 }
