@@ -1,5 +1,5 @@
 variable "location" {
-  default = "South India"
+  default = "centralindia"
 }
 
 variable "resource_group_name" {
@@ -15,6 +15,5 @@ variable "admin_username" {
 }
 
 variable "vm_password" {
-  description = "VM Admin Password"
-  sensitive   = true
+  sensitive = true
 }
