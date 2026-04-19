@@ -1,5 +1,5 @@
 variable "location" {
-  default = "centralindia"
+  default = "southindia"
 }
 
 variable "resource_group_name" {
@@ -11,7 +11,7 @@ variable "vm_name" {
 }
 
 variable "admin_username" {
-  default = "thiru"
+  default = "azureadmin"
 }
 
 variable "vm_password" {

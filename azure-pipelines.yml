@@ -9,30 +9,35 @@ variables:
 
 steps:
 
+# Install Terraform
 - task: TerraformInstaller@1
   inputs:
     terraformVersion: '1.6.6'
 
-# INIT
+# Terraform INIT (with backend config)
 - task: TerraformTaskV4@4
-  displayName: "Terraform Init"
+  displayName: Terraform Init
   inputs:
     provider: 'azurerm'
     command: 'init'
     backendServiceArm: 'azure-subscription-conn'
+    backendAzureRmResourceGroupName: 'tfstate-rg-india'
+    backendAzureRmStorageAccountName: 'tfstate12345india'
+    backendAzureRmContainerName: 'tfstate'
+    backendAzureRmKey: 'terraform.tfstate'
 
-# PLAN
+# Terraform PLAN
 - task: TerraformTaskV4@4
-  displayName: "Terraform Plan"
+  displayName: Terraform Plan
   inputs:
     provider: 'azurerm'
     command: 'plan'
     environmentServiceNameAzureRM: 'azure-subscription-conn'
     commandOptions: '-var="vm_password=$(vm_password)"'
 
-# APPLY
+# Terraform APPLY
 - task: TerraformTaskV4@4
-  displayName: "Terraform Apply"
+  displayName: Terraform Apply
   inputs:
     provider: 'azurerm'
     command: 'apply'
