@@ -19,17 +19,6 @@ steps:
     terraform version
   displayName: Install Terraform
 
-# Azure Login Context (IMPORTANT FIX)
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'azure-subscription-conn'
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      echo "Azure login OK"
-      az account show
-  displayName: Azure Login Check
-
 # Terraform Init
 - script: |
     terraform init -reconfigure
