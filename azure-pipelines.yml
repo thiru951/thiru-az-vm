@@ -9,20 +9,32 @@ variables:
 
 steps:
 
-- task: AzureCLI@2
+- task: TerraformInstaller@1
   inputs:
-    azureSubscription: 'azure-subscription-conn'
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      sudo apt-get update
-      sudo apt-get install -y unzip wget
+    terraformVersion: '1.6.6'
 
-      wget https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
-      unzip terraform_1.6.6_linux_amd64.zip
-      sudo mv terraform /usr/local/bin/
+# INIT
+- task: TerraformTaskV4@4
+  displayName: "Terraform Init"
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'azure-subscription-conn'
 
-      terraform version
-      terraform init -reconfigure
-      terraform plan -var="vm_password=$(vm_password)"
-      terraform apply -auto-approve -var="vm_password=$(vm_password)"
+# PLAN
+- task: TerraformTaskV4@4
+  displayName: "Terraform Plan"
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    environmentServiceNameAzureRM: 'azure-subscription-conn'
+    commandOptions: '-var="vm_password=$(vm_password)"'
+
+# APPLY
+- task: TerraformTaskV4@4
+  displayName: "Terraform Apply"
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    environmentServiceNameAzureRM: 'azure-subscription-conn'
+    commandOptions: '-auto-approve -var="vm_password=$(vm_password)"'
